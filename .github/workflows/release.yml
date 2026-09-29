@@ -4,24 +4,47 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   package:
-    if: github.event.head_commit.message == 'Release IP Extension v1.0.1'
+    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'Release IP Extension v1.0.1'
     name: Build and publish IP Extension v1.0.1
     runs-on: ubuntu-latest
     steps:
       - name: Check out release commit
         uses: actions/checkout@v4
 
+      - name: Validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f manifest.chrome.json
+          test -f manifest.firefox.json
+          test -f src/popup.html
+          test -f src/popup.css
+          test -f src/popup.js
+          test -f src/background.js
+          test -f assets/banner.svg
+
       - name: Build Chrome archive
-        run: ./scripts/package.sh chrome
+        run: bash ./scripts/package.sh chrome
 
       - name: Build Firefox archive
-        run: ./scripts/package.sh firefox
+        run: bash ./scripts/package.sh firefox
+
+      - name: Validate Chrome archive
+        run: |
+          unzip -t dist/ip-extension-chrome.zip
+          unzip -p dist/ip-extension-chrome.zip manifest.json | grep -q '"name": "IP Extension"'
+
+      - name: Validate Firefox archive
+        run: |
+          unzip -t dist/ip-extension-firefox.zip
+          unzip -p dist/ip-extension-firefox.zip manifest.json | grep -q '"name": "IP Extension"'
 
       - name: Publish GitHub release assets
         uses: softprops/action-gh-release@v2
