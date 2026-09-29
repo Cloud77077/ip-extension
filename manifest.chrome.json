@@ -1,26 +1,10 @@
 {
   "manifest_version": 3,
   "name": "IP Extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A privacy-first proxy switcher with optional proxy-country timezone matching.",
-  "action": {
-    "default_title": "IP Extension",
-    "default_popup": "src/popup.html"
-  },
-  "background": {
-    "service_worker": "src/background.js",
-    "type": "module"
-  },
-  "permissions": [
-    "proxy",
-    "storage",
-    "tabs",
-    "webRequest",
-    "webRequestAuthProvider",
-    "debugger"
-  ],
-  "host_permissions": [
-    "<all_urls>",
-    "https://ipwho.is/*"
-  ]
+  "action": {"default_title": "IP Extension", "default_popup": "src/popup.html"},
+  "background": {"service_worker": "src/background.js", "type": "module"},
+  "permissions": ["proxy","storage","tabs","webRequest","webRequestAuthProvider","debugger"],
+  "host_permissions": ["<all_urls>","https://ipwho.is/*"]
 }
