@@ -1,74 +1,134 @@
-# H&M Change
+# IP Extension
 
-![H&M Change banner](assets/banner.svg)
+![IP Extension banner](assets/banner.svg)
 
-**H&M Change** is a monochrome, privacy-focused browser extension for switching one proxy and optionally matching the active tab's timezone to the proxy exit country's timezone. This is the downloadable **v1.0.0** release.
+**IP Extension** is a privacy-focused browser extension for switching a browser proxy and optionally matching the active HTTP/HTTPS tab's timezone to the proxy exit location.
 
-## Download H&M Change v1.0.0
+Current source version: **1.0.1**
 
-| Platform | Download | What to use |
-| --- | --- | --- |
-| **Desktop — Chrome, Chromium, Edge, Brave** | [**Download Chrome extension (ZIP)**](../../releases/download/v1.0.0/hm-change-chrome.zip) | Use this build in Chromium-family desktop browsers. |
-| **Mobile — supported Chromium browsers** | [**Download mobile Chrome extension (ZIP)**](../../releases/download/v1.0.0/hm-change-chrome.zip) | For browsers such as Lemur or Quetta *only when their version supports installing unpacked Chrome extensions*. |
-| **Desktop — Firefox** | [**Download Firefox extension (ZIP)**](../../releases/download/v1.0.0/hm-change-firefox.zip) | Use the Firefox build for temporary/developer installation or AMO signing. |
-| **Mobile — Firefox for Android** | [**Download Firefox extension (ZIP)**](../../releases/download/v1.0.0/hm-change-firefox.zip) | Firefox Android normally accepts only AMO-listed add-ons; this ZIP is for development-capable Firefox builds. |
+## Quick links
 
-## Install on desktop
-
-### Chrome, Chromium, Edge, or Brave
-
-1. Download the [Chrome ZIP](../../releases/download/v1.0.0/hm-change-chrome.zip) and extract it.
-2. Open your browser's extensions page (for example, `chrome://extensions`).
-3. Turn on **Developer mode**.
-4. Select **Load unpacked** and select the extracted folder.
-5. Pin **H&M Change** and open it from the toolbar.
-
-### Firefox
-
-1. Download the [Firefox ZIP](../../releases/download/v1.0.0/hm-change-firefox.zip) and extract it.
-2. For a temporary test install, open `about:debugging#/runtime/this-firefox`.
-3. Select **Load Temporary Add-on** and choose the extracted `manifest.json`.
-4. For a normal persistent Firefox installation, submit/sign the package through AMO.
-
-## Install on mobile
-
-### Chromium-based mobile browsers
-
-Download the [mobile Chrome ZIP](../../releases/download/v1.0.0/hm-change-chrome.zip), extract it, then use your browser's extension-installation flow. Browser support varies by product, version, and platform: install it only if the browser provides an option such as **Load unpacked** or Chrome-extension installation.
-
-### Firefox for Android
-
-Download the [Firefox ZIP](../../releases/download/v1.0.0/hm-change-firefox.zip) for developer testing. Standard Firefox for Android generally installs extensions distributed through AMO, so this local package cannot be installed in the standard stable flow until it is signed and published there.
+| Resource | Link |
+| --- | --- |
+| Source code | [Open `src/`](./src/) |
+| Chrome manifest | [manifest.chrome.json](./manifest.chrome.json) |
+| Firefox manifest | [manifest.firefox.json](./manifest.firefox.json) |
+| Packaging script | [scripts/package.sh](./scripts/package.sh) |
+| Release workflow | [.github/workflows/release.yml](./.github/workflows/release.yml) |
+| Releases | [GitHub Releases](../../releases) |
 
 ## Features
 
-- HTTP, HTTPS, SOCKS4, and SOCKS5 proxies.
-- Optional username/password proxy authentication.
-- Client- and service-worker-side validation for the host, protocol, and port range.
-- `<local>` bypass so local addresses are not proxied.
-- Optional proxy-country lookup through `ipwho.is`, performed only after connecting or selecting **Refresh location**.
-- Optional timezone emulation uses the browser debugging protocol for the current HTTP/HTTPS tab only.
-- One-click disconnect clears the proxy, stored credentials, location, and active timezone override.
+- HTTP, HTTPS, SOCKS4, and SOCKS5 proxy configuration.
+- Optional proxy username/password authentication.
+- Host, protocol, and port validation.
+- `<local>` bypass support.
+- Optional proxy-country lookup through [ipwho.is](https://ipwho.is/).
+- Optional timezone matching for the active HTTP/HTTPS tab.
+- One-click disconnect to clear proxy state and stored connection data.
+- Chrome/Chromium and Firefox packaging from the same source tree.
 
-## Important limitations and safety
+## Installation
 
-- Proxy credentials are stored in extension-local browser storage so the browser can answer proxy authentication challenges. Use a trusted profile/device and select **Disconnect** when finished.
-- A proxy can see traffic that is not end-to-end encrypted. Prefer HTTPS sites and reputable proxy providers.
-- Country detection is best-effort. If the location provider is unavailable, the proxy remains connected but no location/timezone is applied.
-- Timezone matching requires the `debugger` permission and can cause a browser debugging indicator. It does not change the device, operating system, or every browser tab.
-- Managed-browser policies or another proxy extension may prevent H&M Change from controlling proxy settings.
+### Chrome, Chromium, Edge, and Brave
 
-## Build packages yourself
+1. Open [GitHub Releases](../../releases).
+2. Download the latest Chrome ZIP.
+3. Extract it.
+4. Open the browser extensions page, such as `chrome://extensions`.
+5. Enable Developer mode.
+6. Select Load unpacked and choose the extracted folder.
+7. Pin **IP Extension**.
 
-No npm dependencies are required:
+### Firefox
+
+1. Open [GitHub Releases](../../releases).
+2. Download the latest Firefox ZIP.
+3. Extract it.
+4. Open `about:debugging#/runtime/this-firefox`.
+5. Select Load Temporary Add-on and choose the extracted `manifest.json`.
+6. Persistent distribution must follow Mozilla signing requirements.
+
+### Mobile browsers
+
+Unpacked extension support depends on the browser and version. Firefox for Android normally relies on Mozilla's supported add-on distribution flow.
+
+## Proxy and authentication
+
+Enter the proxy protocol, host, port, and optional username/password in the extension UI. Credentials are kept in extension-local browser storage because the browser needs them for proxy authentication challenges.
+
+Use proxy providers you trust. A proxy can observe traffic that is not protected by end-to-end encryption.
+
+## Timezone matching
+
+When enabled, IP Extension can look up the proxy exit location and apply a timezone override to the current HTTP/HTTPS tab. This uses the browser `debugger` permission and may display a debugging indicator.
+
+It does not change the operating-system timezone and does not automatically change every browser tab.
+
+## Privacy and security
+
+- Proxy credentials are stored locally in extension browser storage.
+- Location lookup is optional and uses the configured `ipwho.is` endpoint.
+- Do not enter credentials into an untrusted browser profile.
+- Prefer HTTPS websites when using a proxy.
+- Disconnect the proxy when finished.
+- Managed-browser policies can prevent proxy control.
+
+## Build from source
+
+The project has no npm dependency installation step.
 
 ```bash
 ./scripts/package.sh chrome
 ./scripts/package.sh firefox
 ```
 
-The commands produce `dist/hm-change-chrome.zip` and `dist/hm-change-firefox.zip`. On a `v1.0.0` tag, the release workflow builds these same archives and attaches them to the GitHub release; the download buttons above point to those release assets. The binary archives are deliberately not committed, keeping pull requests reviewable in source form.
+Generated packages:
 
-## Screenshot / UI preview
+- `dist/ip-extension-chrome.zip`
+- `dist/ip-extension-firefox.zip`
 
-The banner is a preview of H&M Change's white-and-black design. After loading the extension, select its toolbar icon to open the proxy controls.
+The `dist/` directory is ignored by Git. Release archives are generated by GitHub Actions and attached to GitHub Releases instead of being committed.
+
+## Project structure
+
+```text
+ip-extension/
+├── .github/workflows/release.yml
+├── assets/
+├── src/
+├── scripts/package.sh
+├── manifest.chrome.json
+├── manifest.firefox.json
+├── README.md
+└── .gitignore
+```
+
+## Releases
+
+Releases use semantic version tags such as `v1.0.1`.
+
+When a version tag is pushed, [the release workflow](./.github/workflows/release.yml) builds separate Chrome and Firefox ZIP packages and attaches them to the GitHub Release.
+
+The source repository intentionally does not contain generated ZIP/CRX/XPI packages.
+
+See [all releases](../../releases).
+
+## Versioning
+
+The extension version is kept consistent between the two manifests and Git release tags. The current source version is **1.0.1**.
+
+## Limitations
+
+- Country detection is best-effort and depends on the external location service.
+- Timezone matching is limited to the active HTTP/HTTPS tab.
+- Browser-managed policies can block proxy control.
+- Firefox distribution has additional Mozilla signing requirements.
+
+## License
+
+No license is claimed unless an explicit license file is present. Add a license before accepting third-party contributions if you intend to publish this as open source.
+
+## Contributing
+
+Keep changes source-focused and reviewable. Do not commit generated packages, credentials, API keys, or other secrets.
