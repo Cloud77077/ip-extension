@@ -15,6 +15,11 @@ api.webRequest.onAuthRequired.addListener(
 );
 
 function proxyRules(config) { return { mode: 'fixed_servers', rules: { singleProxy: { scheme: config.scheme, host: config.host, port: config.port }, bypassList: ['<local>'] } }; }
+function validateConfig(config) {
+  if (!config || !['http', 'https', 'socks4', 'socks5'].includes(config.scheme)) throw new Error('Choose a supported proxy protocol.');
+  if (typeof config.host !== 'string' || !config.host.trim()) throw new Error('Enter a proxy host.');
+  if (!Number.isInteger(config.port) || config.port < 1 || config.port > 65535) throw new Error('Enter a port from 1 to 65535.');
+}
 async function applyTimezone(timezone) {
   if (!timezone) return;
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });
@@ -32,7 +37,7 @@ async function locate() {
 api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     if (message.type === 'status') return getStatus();
-    if (message.type === 'connect') { const config = message.config; await api.proxy.settings.set({ value: proxyRules(config), scope: 'regular' }); await saveConfig(config); await api.storage.local.remove('location'); const located = await locate(); return { ok: true, ...located }; }
+    if (message.type === 'connect') { const config = message.config; validateConfig(config); await clearTimezone(); await api.proxy.settings.set({ value: proxyRules(config), scope: 'regular' }); await saveConfig(config); await api.storage.local.remove('location'); const located = await locate(); return { ok: true, ...located }; }
     if (message.type === 'disconnect') { await api.proxy.settings.clear({ scope: 'regular' }); await clearTimezone(); configCache = null; await api.storage.local.remove(['proxyConfig', 'location']); return { ok: true }; }
     if (message.type === 'locate') return locate();
     return { ok: false, error: 'Unknown request.' };
