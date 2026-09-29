@@ -1,4 +1,4 @@
-name: Publish extension release
+name: Publish IP Extension release
 
 on:
   push:
@@ -15,14 +15,32 @@ jobs:
     steps:
       - name: Check out release tag
         uses: actions/checkout@v4
+
+      - name: Verify tag and manifest versions
+        env:
+          TAG_VERSION: ${{ github.ref_name }}
+        run: |
+          tag_version="${TAG_VERSION#v}"
+          case "$TAG_VERSION" in
+            v[0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "Tags must use the vMAJOR.MINOR.PATCH format." >&2; exit 1 ;;
+          esac
+          chrome_version="$(jq -r '.version' manifest.chrome.json)"
+          firefox_version="$(jq -r '.version' manifest.firefox.json)"
+          test "$TAG_VERSION" != "$tag_version"
+          test "$chrome_version" = "$tag_version"
+          test "$firefox_version" = "$tag_version"
+
       - name: Build Chrome archive
         run: ./scripts/package.sh chrome
+
       - name: Build Firefox archive
         run: ./scripts/package.sh firefox
+
       - name: Publish GitHub release assets
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           files: |
-            dist/hm-change-chrome.zip
-            dist/hm-change-firefox.zip
+            dist/ip-extension-chrome.zip
+            dist/ip-extension-firefox.zip

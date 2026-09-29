@@ -1,2 +1,12 @@
-# Locally generated packages and staging directories. Release archives are published by GitHub Actions.
+# Locally generated release packages and their staging directories.
 dist/
+*.zip
+*.crx
+*.xpi
+*.exe
+*.apk
+
+# Local editor and operating-system files.
+.DS_Store
+.idea/
+.vscode/

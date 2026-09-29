@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "H&M Change",
+  "name": "IP Extension",
   "version": "1.0.0",
-  "description": "A privacy-first proxy switcher with optional proxy-country timezone matching.",
+  "description": "A privacy-focused proxy switcher with optional proxy-country timezone matching.",
   "action": {
-    "default_title": "H&M Change",
+    "default_title": "IP Extension",
     "default_popup": "src/popup.html"
   },
   "background": {
