@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>H&M Proxy Time</title></head>
+<body><main><header><span class="wordmark">H&amp;M</span><span class="edition">PROXY TIME</span></header>
+<section class="hero"><p class="eyebrow">NETWORK CONTROL</p><h1>Connect<br>without compromise.</h1><p class="sub">Use a proxy and, if you choose, align this tab’s timezone with its detected country.</p></section>
+<form id="proxy-form">
+<label>PROTOCOL<select id="scheme"><option value="http">HTTP</option><option value="https">HTTPS</option><option value="socks4">SOCKS4</option><option value="socks5">SOCKS5</option></select></label>
+<div class="split"><label>PROXY HOST<input id="host" required placeholder="198.51.100.20 or proxy.example"></label><label>PORT<input id="port" required inputmode="numeric" placeholder="8080" pattern="[0-9]+"></label></div>
+<details><summary>Authentication <span>optional</span></summary><div class="split auth"><label>USERNAME<input id="username" autocomplete="username" placeholder="Optional"></label><label>PASSWORD<input id="password" type="password" autocomplete="current-password" placeholder="Optional"></label></div></details>
+<label class="toggle"><input id="timezone" type="checkbox"><span></span><b>Match timezone to proxy country</b></label>
+<p class="hint">Optional. We detect the proxy’s public country after connecting, then apply its timezone only to the current tab.</p>
+<button id="connect" type="submit">CONNECT PROXY</button><button id="disconnect" type="button" class="secondary">DISCONNECT</button>
+</form>
+<section class="status" aria-live="polite"><div><i id="dot"></i><span id="state">Checking status…</span></div><p id="location">No proxy location detected.</p></section>
+<footer><button id="refresh" class="text" type="button">REFRESH LOCATION</button><span>v1.0.0</span></footer></main><script type="module" src="popup.js"></script></body></html>

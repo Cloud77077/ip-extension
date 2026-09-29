@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "H&M Proxy Time",
+  "version": "1.0.0",
+  "description": "A privacy-first proxy switcher with optional proxy-country timezone emulation.",
+  "action": {
+    "default_title": "H&M Proxy Time",
+    "default_popup": "src/popup.html"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "proxy",
+    "storage",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "debugger"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "https://ipwho.is/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hm-proxy-time@example.invalid",
+      "strict_min_version": "121.0"
+    }
+  }
+}
