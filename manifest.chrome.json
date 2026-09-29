@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "H&M Proxy Time",
+  "name": "H&M Change",
   "version": "1.0.0",
-  "description": "A privacy-first proxy switcher with optional proxy-country timezone emulation.",
+  "description": "A privacy-first proxy switcher with optional proxy-country timezone matching.",
   "action": {
-    "default_title": "H&M Proxy Time",
+    "default_title": "H&M Change",
     "default_popup": "src/popup.html"
   },
   "background": {

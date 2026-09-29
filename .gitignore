@@ -1,2 +1,2 @@
-# Locally generated distributable archives and staging directories.
+# Locally generated packages and staging directories. Release archives are published by GitHub Actions.
 dist/
